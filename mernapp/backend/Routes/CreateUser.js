@@ -5,9 +5,9 @@ const User = require('../models/User')
 const { body, validationResult } = require('express-validator');
 router.post("/createuser",[
 body('email').isEmail(),
-body('name').isLength({ min: 6 }),
+body('name').isLength({ min: 5 }),
 // password must be at least 5 chars long
-body('password','incorrect').isLength({ min: 6 })]
+body('password','incorrect').isLength({ min: 5 })]
 ,async(req,res)=>{
 
     const errors = validationResult(req);
@@ -22,9 +22,9 @@ body('password','incorrect').isLength({ min: 6 })]
         name : req.body.name,
         password :req.body.password,
         email : req.body.email,
-        location :req.body.location
+       
     })
-    .then.res.json({success:true});
+    res.json({success:true});
    } catch(err){
     console.log(err)
     res.json({success:false});

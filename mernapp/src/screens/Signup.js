@@ -1,30 +1,40 @@
 import React,{useState} from 'react'
-import {Link} from 'react-router-dom'
+import {useNavigate,Link} from 'react-router-dom'
 
 
 
 export default function Signup() {
     const [credentials,setcredentials]=useState({name:"",email:"",password:""})
 
-    const handleSubmit =async(e) => {
-        e.preventDefault();
-        const response= await fetch("http://localhost:5000/api/createuser",{
-        method:'POST',
-        headers : {
-            'Content-Type':'application/json'
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      const response = await fetch("http://localhost:8000/api/createuser", {
+        // credentials: 'include',
+        // Origin:"http://localhost:3000/login",
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         },
-        body:JSON.stringify({name:credentials.name,email:credentials.email,password:credentials.password}),
-    });
-    const json = await response.json()
-    console.log(json);
-
-    if(!json.success){
-        alert("Enter valid credentials")
+        body: JSON.stringify({ name: credentials.name, email: credentials.email, password: credentials.password })
+  
+      });
+      const json = await response.json()
+      console.log(json);
+      if (json.success) {
+        //save the auth toke to local storage and redirect
+        localStorage.setItem('token', json.authToken)
+        //navigate("/login")
+  
+      }
+      else {
+        alert("Enter Valid Credentials")
+      }
     }
+  
+    const onChange = (e) => {
+      setcredentials({ ...credentials, [e.target.name]: e.target.value })
     }
-const onChange=(event) => {
-    setcredentials({...credentials,[event.target.name]:event.target.value})
-}    
+  
   return (
     <>
     <div className='container'>
